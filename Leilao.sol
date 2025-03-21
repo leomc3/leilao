@@ -17,7 +17,8 @@ contract Leilao {
         
         // Reembolsa o antigo maior licitante
         if (maiorLicitante != address(0)) {
-            payable(maiorLicitante).transfer(maiorLance);
+            (bool sucesso, ) = payable(maiorLicitante).call{value: maiorLance}("");
+            require(sucesso, "Falha ao reembolsar antigo maior licitante.");
         }
         
         lances[msg.sender] += msg.value;
